@@ -144,15 +144,6 @@ public class BookController
     //     // return ResponseEntity.created(location).body(updatedBook);
     // }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
-    // @PostMapping("/{bookId}/reviews")
-    // public ResponseEntity<?> createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Review review, Errors errors){
-    //     Review savedReview = bookService.addReviewToBook(bookId, review);
-    //     return ResponseEntity.ok(savedReview);
-    //     // URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedReview.getId()).toUri();
-    //     // return ResponseEntity.created(location).body(savedReview);  
-    // }
-
     // @ExceptionHandler
     // public ResponseEntity<?> bindingException(ValidationException e){
     //     ErrorDetails errorDetails = new ErrorDetails();
