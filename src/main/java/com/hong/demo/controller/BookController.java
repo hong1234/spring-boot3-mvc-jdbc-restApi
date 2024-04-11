@@ -48,8 +48,8 @@ import com.hong.demo.exceptions.ErrorDetails;
 
 @RestController
 @RequestMapping(value="/api/books")
-public class BookController
-{
+public class BookController {
+    
     @Autowired
     BookService bookService;
 
