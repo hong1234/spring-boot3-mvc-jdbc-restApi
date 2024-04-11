@@ -136,28 +136,12 @@ public class BookController
     //     // return ResponseEntity.created(location).body(savedBook);
     // }
 
-    // @PutMapping("/{bookId}")
-    // public ResponseEntity<?> updateBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book book, Errors errors){      
-    //     Book updatedBook = bookService.updateBook(bookId, book);
-    //     return ResponseEntity.ok(updatedBook);
-    //     // URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("").buildAndExpand(updatedBook.getId()).toUri();
-    //     // return ResponseEntity.created(location).body(updatedBook);
-    // }
-
     // @ExceptionHandler
     // public ResponseEntity<?> bindingException(ValidationException e){
     //     ErrorDetails errorDetails = new ErrorDetails();
     //     errorDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     //     errorDetails.setMessage(e.getMessage());
     //     return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
-
-    // @ExceptionHandler
-    // public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException e){
-    //     ErrorDetails errorDetails = new ErrorDetails();
-    //     errorDetails.setStatus(HttpStatus.NOT_FOUND);
-    //     errorDetails.setMessage(e.getMessage());
-    //     return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     // }
     
 }
