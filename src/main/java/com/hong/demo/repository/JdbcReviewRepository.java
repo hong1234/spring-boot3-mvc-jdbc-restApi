@@ -1,7 +1,5 @@
 package com.hong.demo.repository;
 
-// import lombok.RequiredArgsConstructor;
-
 // import java.sql.ResultSet;
 // import java.sql.SQLException;
 // import java.sql.Date;
@@ -11,8 +9,6 @@ import java.util.*;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Repository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,8 +22,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import com.hong.demo.domain.Review;
 import com.hong.demo.domain.LikeStatus;
 
+import lombok.AllArgsConstructor;
+// import lombok.extern.slf4j.Slf4j;
+
 @Repository
-// @RequiredArgsConstructor
+@AllArgsConstructor
 public class JdbcReviewRepository implements ReviewRepository { 
 
     private static final String SQL_QUERY_FIND_ALL = "select * from reviews";
@@ -40,13 +39,7 @@ public class JdbcReviewRepository implements ReviewRepository {
     private static final String SQL_DELETE_BOOK_REVIEWS = "delete from reviews where book_id = :bookId";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-
-    public JdbcReviewRepository(NamedParameterJdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @Autowired
-    ReviewRowMapper reviewRowMapper;
+    private final ReviewRowMapper reviewRowMapper;
 
     @Override
     public Review findById(Integer reviewId){

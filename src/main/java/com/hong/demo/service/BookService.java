@@ -1,9 +1,9 @@
 package com.hong.demo.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -19,14 +19,17 @@ import com.hong.demo.exceptions.ResourceNotFoundException;
 import com.hong.demo.exceptions.SpringAppException;
 import com.hong.demo.exceptions.ErrorDetails;
 
+import lombok.AllArgsConstructor;
+// import lombok.extern.slf4j.Slf4j;
+
+
+// @Slf4j
 @Service
+@AllArgsConstructor
 public class BookService {
 
-    @Autowired
-    BookRepository bookRepository;
-
-    @Autowired
-    ReviewRepository reviewRepository;
+    private final BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
 
     public Iterable<Book> bookList(){
         return bookRepository.findAll();

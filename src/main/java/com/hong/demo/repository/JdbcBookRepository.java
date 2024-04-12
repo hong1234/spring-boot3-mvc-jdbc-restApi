@@ -12,7 +12,7 @@ import java.util.*;
 
 import org.springframework.stereotype.Repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 
 // import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -26,9 +26,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.hong.demo.domain.Book;
 
+import lombok.AllArgsConstructor;
+// import lombok.extern.slf4j.Slf4j;
 
 @Repository
-// @RequiredArgsConstructor
+@AllArgsConstructor
 public class JdbcBookRepository implements BookRepository { 
 
     private static final String SQL_QUERY_FIND_ALL = "select * from books";
@@ -42,13 +44,14 @@ public class JdbcBookRepository implements BookRepository {
 
     // private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final BookRowMapper bookRowMapper;
 
-    public JdbcBookRepository(NamedParameterJdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    // public JdbcBookRepository(NamedParameterJdbcTemplate jdbcTemplate){
+    //     this.jdbcTemplate = jdbcTemplate;
+    // }
 
-    @Autowired
-    BookRowMapper bookRowMapper;
+    // @Autowired
+    // BookRowMapper bookRowMapper;
 
     @Override
     public Book findById(Integer bookId){

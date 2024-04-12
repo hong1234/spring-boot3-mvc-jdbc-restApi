@@ -1,15 +1,17 @@
 package com.hong.demo.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 import java.util.Date;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.net.URI;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+// import java.net.URI;
+// import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -30,8 +32,9 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import org.springframework.validation.Errors;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-// import org.springframework.validation.BindingResult;
+
 
 import com.hong.demo.domain.Review;
 import com.hong.demo.domain.Book;
@@ -47,11 +50,13 @@ import com.hong.demo.exceptions.ErrorDetails;
 
 
 @RestController
-@RequestMapping(value="/api/books")
+@AllArgsConstructor
+@RequestMapping(value=BookController.CONTROLLER_PATH)
 public class BookController {
-    
-    @Autowired
-    BookService bookService;
+
+    public static final String CONTROLLER_PATH = "/api/books";
+
+    private final BookService bookService;
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
@@ -75,27 +80,27 @@ public class BookController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Book createBook(@Valid @RequestBody Book book, Errors errors){ 
-        if (errors.hasErrors()) {
+        if (errors.hasErrors()) 
             throw new ValidationException(createErrorString(errors));
-        }
+        
         return bookService.addBook(book);
     }
 
     @PutMapping("/{bookId}")
     @ResponseStatus(HttpStatus.OK)
     public Book updateBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book book, Errors errors){
-    	if(errors.hasErrors()){
+    	if(errors.hasErrors())
             throw new ValidationException(createErrorString(errors));
-        }    
+
         return bookService.updateBook(bookId, book);
     }
 
     @PostMapping("/{bookId}/reviews")
     @ResponseStatus(HttpStatus.CREATED)
     public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Review review, Errors errors){
-        if(errors.hasErrors()){
+        if(errors.hasErrors())
             throw new ValidationException(createErrorString(errors));
-        }
+
         return bookService.addReviewToBook(bookId, review);
     }
     

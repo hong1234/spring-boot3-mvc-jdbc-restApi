@@ -3,6 +3,7 @@ package com.hong.demo.domain;
 
 // import lombok.*; 
 // import lombok.NoArgsConstructor;
+// import lombok.AllArgsConstructor;
 import lombok.Data;
  
 import java.util.List;
