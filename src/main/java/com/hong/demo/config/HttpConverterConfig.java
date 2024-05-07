@@ -24,17 +24,16 @@ public class HttpConverterConfig {
     // public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATETIME_FORMAT = "dd-MM-yyyy HH:mm";
 
-    private Jackson2ObjectMapperBuilder getObjectMapperBuilder(){
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATETIME_FORMAT)));
-        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
-        return builder;
-    }
+    // private Jackson2ObjectMapperBuilder getObjectMapperBuilder(){
+    //     Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+    //     builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATETIME_FORMAT)));
+    //     builder.serializationInclusion(JsonInclude.Include.NON_NULL);
+    //     return builder;
+    // }
 
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
-        
         JavaTimeModule module = new JavaTimeModule();
         module.addSerializer(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATETIME_FORMAT)));
 
@@ -43,7 +42,6 @@ public class HttpConverterConfig {
         objMapper.registerModule(module);
 
         return objMapper; 
-
         // return getObjectMapperBuilder().build();
     }
 
