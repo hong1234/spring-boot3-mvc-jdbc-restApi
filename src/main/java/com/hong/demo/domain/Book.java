@@ -26,12 +26,14 @@ public class Book {
     
     private Integer id;
     
-    @NotNull
+    // @NotNull
+    @NotBlank(message = "Title is mandatory")
     @Size(min = 3, max = 50, message = "must be minimum 3 characters, and maximum 50 characters long")
     private String title;
    
-    @NotNull
-    @Size(min = 3, max = 500, message = "must be minimum 3 characters, and maximum 500 characters long")
+    // @NotNull
+    @NotBlank(message = "Content is mandatory")
+    @Size(min = 8, max = 500, message = "must be minimum 8 characters, and maximum 500 characters long")
     private String content;
     
     // @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Berlin")

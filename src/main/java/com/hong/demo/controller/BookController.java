@@ -37,7 +37,9 @@ import org.springframework.validation.FieldError;
 
 
 import com.hong.demo.domain.Review;
+import com.hong.demo.domain.ReviewDto;
 import com.hong.demo.domain.Book;
+import com.hong.demo.domain.LikeStatus;
 
 import com.hong.demo.repository.ReviewRepository;
 import com.hong.demo.repository.BookRepository;
@@ -77,38 +79,64 @@ public class BookController {
         return bookService.getBookById(bookId);
     }
 
+    // @PostMapping(consumes="application/json")
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public Book createBook(@Valid @RequestBody Book book, Errors errors){ 
+    //     if (errors.hasErrors()) 
+    //         throw new ValidationException(createErrorString(errors));   
+    //     return bookService.addBook(book);
+    // }
+
     @PostMapping(consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Book createBook(@Valid @RequestBody Book book, Errors errors){ 
-        if (errors.hasErrors()) 
-            throw new ValidationException(createErrorString(errors));
-        
+    public Book createBook(@Valid @RequestBody Book book){ 
         return bookService.addBook(book);
     }
 
+    // @PutMapping(path="/{bookId}", consumes="application/json")
+    // @ResponseStatus(HttpStatus.OK)
+    // public Book updateBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book book, Errors errors){
+    // 	if(errors.hasErrors())
+    //         throw new ValidationException(createErrorString(errors));
+    //     return bookService.updateBook(bookId, book);
+    // }
+
     @PutMapping(path="/{bookId}", consumes="application/json")
     @ResponseStatus(HttpStatus.OK)
-    public Book updateBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book book, Errors errors){
-    	if(errors.hasErrors())
-            throw new ValidationException(createErrorString(errors));
-
+    public Book updateBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book book){
         return bookService.updateBook(bookId, book);
     }
 
-    // @PatchMapping(path="/{bookId}", consumes="application/json")
-    // @ResponseStatus(HttpStatus.OK)
-    // public Book patchBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book patch, Errors errors) {
-	//     if (patch.getTitle() != null) {}
+    // @PostMapping(path="/{bookId}/reviews", consumes="application/json")
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Review review, Errors errors){
+    //     // if(errors.hasErrors())
+    //     //     throw new ValidationException(createErrorString(errors));
+    //     return bookService.addReviewToBook(bookId, review);
     // }
+
+    // @PostMapping(path="/{bookId}/reviews", consumes="application/json")
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Review review){
+    //     return bookService.addReviewToBook(bookId, review);
+    // }
+
+    private Review getReview(ReviewDto reviewDto){
+        Review review = new Review();
+        review.setName(reviewDto.getName());
+        review.setEmail(reviewDto.getEmail());
+        review.setContent(reviewDto.getContent());
+        review.setLikeStatus(LikeStatus.valueOf(reviewDto.getLikeStatus()));
+        return review;
+    }
 
     @PostMapping(path="/{bookId}/reviews", consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Review review, Errors errors){
-        if(errors.hasErrors())
-            throw new ValidationException(createErrorString(errors));
-
+    public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody ReviewDto reviewDto){
+        Review review = getReview(reviewDto);
         return bookService.addReviewToBook(bookId, review);
     }
+    
 
     @GetMapping("/{bookId}/reviews")
     @ResponseStatus(HttpStatus.OK)
@@ -138,15 +166,6 @@ public class BookController {
         });
         return sb.toString();
     }
-
-    // @PostMapping(consumes="application/json")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public ResponseEntity<?> createBook(@Valid @RequestBody Book book, Errors errors){ 
-    //     Book savedBook = bookService.addBook(book);
-    //     return ResponseEntity.ok(savedBook);
-    //     // URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedBook.getId()).toUri();
-    //     // return ResponseEntity.created(location).body(savedBook);
-    // }
 
     // @ExceptionHandler
     // public ResponseEntity<?> bindingException(ValidationException e){

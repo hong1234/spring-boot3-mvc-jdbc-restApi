@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus;
 public class ErrorDetails {
 
 	private HttpStatus status;
-    private String message;
-    private Map<String, Object> additionalData = new HashMap<>();
+	private Map<String, String> errorDetails = new HashMap<>();
+	// private String message;
+	// private Map<String, Object> additionalData = new HashMap<>();
  
 	public HttpStatus getStatus() {
 		return status;
@@ -16,18 +17,23 @@ public class ErrorDetails {
 	public void setStatus(HttpStatus status) {
 		this.status = status;
 	}
-	public String getMessage() {
-		return message;
+
+	public Map<String, String> getErrorDetails() {
+		return errorDetails;
 	}
+	public void setErrorDetails(Map<String, String> errorDetails) {
+		this.errorDetails = errorDetails;
+	}
+
 	public void setMessage(String message) {
-		this.message = message;
+		errorDetails.put("exception", message);
 	}
-	
-	public Map<String, Object> getAdditionalData() {
-		return additionalData;
-	}
-	public void setAdditionalData(Map<String, Object> additionalData) {
-		this.additionalData = additionalData;
-	}
+
+	// public String getMessage() {
+	// 	return message;
+	// }
+	// public void setMessage(String message) {
+	// 	this.message = message;
+	// }
 
 }
