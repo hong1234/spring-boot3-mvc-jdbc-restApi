@@ -36,7 +36,7 @@ public class ReviewDto {
     @Size(min = 8, max = 500, message = "must be minimum 8 characters, and maximum 500 characters long")
     private String content;
 
-    // @NotNull
+    @NotNull(message = "likeStatus is mandatory")
     // @NotBlank(message = "likeStatus is mandatory")
     @StatusValidation(name="likeStatus")  // throws a MethodArgumentNotValidException exception.
     private String likeStatus;

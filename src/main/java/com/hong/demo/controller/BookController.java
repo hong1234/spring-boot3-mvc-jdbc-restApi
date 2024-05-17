@@ -46,7 +46,6 @@ import com.hong.demo.repository.BookRepository;
 import com.hong.demo.service.BookService;
 
 import com.hong.demo.exceptions.ResourceNotFoundException;
-import com.hong.demo.exceptions.SpringAppException;
 import com.hong.demo.exceptions.ValidationException;
 import com.hong.demo.exceptions.ErrorDetails;
 
