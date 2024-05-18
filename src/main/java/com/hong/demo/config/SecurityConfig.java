@@ -9,19 +9,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-
 import javax.sql.DataSource;
+
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+// import org.springframework.boot.CommandLineRunner;
 
 @Configuration
 public class SecurityConfig {
@@ -57,37 +65,53 @@ public class SecurityConfig {
     //     return new InMemoryUserDetailsManager(hong, admin);
     // }
 
+    private void usersInit(UserDetailsManager userManager){
+		// users init ----
+		User.UserBuilder builder = User.builder().passwordEncoder(passwordEncoder()::encode);
+
+		UserDetails hong  = builder.username("hong").password("hong").roles("USER").build();
+		UserDetails admin = builder.username("admin").password("admin").roles("ADMIN").build();
+        UserDetails boss  = builder.username("bigboss").password("bigboss").roles("USER", "ADMIN").build();
+
+		userManager.createUser(hong);
+        userManager.createUser(admin);
+        userManager.createUser(boss);
+	}
+
+
     @Bean
-    UserDetailsManager users(DataSource dataSource) {
+    UserDetailsService userDetailsService(DataSource dataSource) {
         // return new JdbcUserDetailsManager(dataSource);
 
-        User.UserBuilder users  = User.builder().passwordEncoder(passwordEncoder()::encode);
+        UserDetailsManager userManager = new JdbcUserDetailsManager(dataSource);
+
+        // User.UserBuilder builder  = User.builder().passwordEncoder(passwordEncoder()::encode);
         
-        var hong = users
-                .username("hong")
-                .password("password")
-                .roles("USER")
-                .build();
+        // var hong = builder
+        //         .username("hong")
+        //         .password("hong")
+        //         .roles("USER")
+        //         .build();
 
-        var admin = users
-                .username("admin")
-                .password("admin")
-                .roles("ADMIN")
-                .build();
+        // var admin = builder
+        //         .username("admin")
+        //         .password("admin")
+        //         .roles("ADMIN")
+        //         .build();
 
-        var boss = users
-                .username("bigboss")
-                .password("bigboss")
-                .roles("USER", "ADMIN")
-                .build();
+        // var boss = builder
+        //         .username("bigboss")
+        //         .password("bigboss")
+        //         .roles("USER", "ADMIN")
+        //         .build();
 
-        var manager = new JdbcUserDetailsManager(dataSource);
+        // userManager.createUser(hong);
+        // userManager.createUser(admin);
+        // userManager.createUser(boss);
 
-        manager.createUser(hong);
-        manager.createUser(admin);
-        manager.createUser(boss);
+        usersInit(userManager);
 
-        return manager;
+        return userManager;
     }
 
     @Bean
@@ -96,7 +120,7 @@ public class SecurityConfig {
             .csrf((csrf) -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
-                // .requestMatchers(HttpMethod.GET, "/api/books/**").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/books/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN")
@@ -104,6 +128,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
                 .anyRequest().denyAll()
             )
+            // .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // This so embedded frames in h2-console are working
             // .httpBasic(Customizer.withDefaults());
 
             .httpBasic(basic -> basic.authenticationEntryPoint(authEntryPoint))
