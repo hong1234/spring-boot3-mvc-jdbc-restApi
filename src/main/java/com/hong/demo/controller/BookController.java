@@ -78,6 +78,12 @@ public class BookController {
         return bookService.getBookById(bookId);
     }
 
+    @GetMapping("/{bookId}/reviews")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Review> getReviewsOfBook(@PathVariable("bookId") Integer bookId){
+    	return bookService.getBookReviews(bookId);
+    }
+
     // @PostMapping(consumes="application/json")
     // @ResponseStatus(HttpStatus.CREATED)
     // public Book createBook(@Valid @RequestBody Book book, Errors errors){ 
@@ -104,6 +110,12 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public Book updateBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book book){
         return bookService.updateBook(bookId, book);
+    }
+
+    @DeleteMapping("/{bookId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable("bookId") Integer bookId){
+        bookService.deleteBook(bookId);
     }
 
     // @PostMapping(path="/{bookId}/reviews", consumes="application/json")
@@ -135,13 +147,6 @@ public class BookController {
         Review review = getReview(reviewDto);
         return bookService.addReviewToBook(bookId, review);
     }
-    
-
-    @GetMapping("/{bookId}/reviews")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Review> getReviewsOfBook(@PathVariable("bookId") Integer bookId){
-    	return bookService.getBookReviews(bookId);
-    }
 
     @DeleteMapping("/reviews/{reviewId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -149,11 +154,7 @@ public class BookController {
         bookService.deleteReview(reviewId);
     }
 
-    @DeleteMapping("/{bookId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable("bookId") Integer bookId){
-        bookService.deleteBook(bookId);
-    }
+    
 
     private String createErrorString(Errors result){
         StringBuilder sb =  new StringBuilder();
