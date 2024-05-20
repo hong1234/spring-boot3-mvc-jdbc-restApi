@@ -95,24 +95,9 @@ public class SecurityConfig {
         userManager.createUser(admin);
 	}
 
-    // @Bean
-    // CommandLineRunner initUsers(@Qualifier("userService") UserDetailsService userManager, User.UserBuilder userBuilder) {
-    //     return args -> {
-    //         userManager.createUser(userBuilder.username("hong").password("hong").roles("USER").build());
-    //         userManager.createUser(userBuilder.username("admin").password("admin").roles("ADMIN").build());
-    //         userManager.createUser(userBuilder.username("bigboss").password("bigboss").roles("USER", "ADMIN").build());
-    //     };
-    // } 
-
-    // @Bean
-    // public User.UserBuilder userBuilder() {
-    //     return User.builder().passwordEncoder(passwordEncoder()::encode);
-    // }
-
     @Bean
     UserDetailsService userService(DataSource dataSource) {
         // return new JdbcUserDetailsManager(dataSource);
-
         UserDetailsManager userManager = new JdbcUserDetailsManager(dataSource);
 
         // User.UserBuilder builder  = User.builder().passwordEncoder(passwordEncoder()::encode);
@@ -140,7 +125,6 @@ public class SecurityConfig {
         // userManager.createUser(boss);
 
         usersInit(userManager);
-
         return userManager;
     }
 
@@ -151,18 +135,18 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
                 // .requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/books/**").permitAll()
+                .requestMatchers(HttpMethod.GET).permitAll()
 
-                .requestMatchers(HttpMethod.POST, "/api/books").hasRole("AUTOR")
-                .requestMatchers(HttpMethod.PUT, "/api/books/{bookId}").hasRole("AUTOR")
-                .requestMatchers(HttpMethod.DELETE, "/api/books/{bookId}").hasRole("AUTOR")
+                // .requestMatchers(HttpMethod.POST, "/api/books").hasRole("AUTOR")
+                // .requestMatchers(HttpMethod.PUT, "/api/books/{bookId}").hasRole("AUTOR")
+                // .requestMatchers(HttpMethod.DELETE, "/api/books/{bookId}").hasRole("AUTOR")
 
-                // .requestMatchers(HttpMethod.PATCH, "/api/books/**").hasRole("ADMIN")
-                // .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
+                .requestMatchers("/api/books/**").hasRole("AUTOR")
 
-                .requestMatchers(HttpMethod.POST, "/api/books/{bookId}/reviews").hasRole("USER")
-                // .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("USER")
-                .requestMatchers(HttpMethod.DELETE, "/api/books/reviews/{reviewId}").hasRole("USER")
+                // .requestMatchers(HttpMethod.POST, "/api/reviews/{bookId}").hasRole("USER")
+                // .requestMatchers(HttpMethod.PUT, "/api/reviews/{reviewId}").hasRole("USER")
+                // .requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").hasRole("USER")
+                .requestMatchers("/api/reviews/**").hasRole("USER")
 
                 .anyRequest().denyAll()
             )

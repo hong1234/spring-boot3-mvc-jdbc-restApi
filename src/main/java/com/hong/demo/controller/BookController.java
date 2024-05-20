@@ -56,32 +56,28 @@ import com.hong.demo.exceptions.ErrorDetails;
 // @CrossOrigin(origins = {"http://localhost:3000", "http://uicloud.com"})
 public class BookController {
 
-    public static final String CONTROLLER_PATH = "/api/books";
+    public static final String CONTROLLER_PATH = "/api";
 
     private final BookService bookService;
 
-    @GetMapping
+    // books ---
+
+    @GetMapping("/books")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Book> listBooks(){
+    public Iterable<Book> getAllBooks(){
         return bookService.bookList();
     }
 
-    @GetMapping("/search")
+    @GetMapping("/books/search")
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Book> searchBooksByTitle(@RequestParam String title){
         return bookService.searchBooksByTitle(title);
     }
 
-    @GetMapping("/{bookId}")
+    @GetMapping("/books/{bookId}")
     @ResponseStatus(HttpStatus.OK)
     public Book getBookById(@PathVariable("bookId") Integer bookId){
         return bookService.getBookById(bookId);
-    }
-
-    @GetMapping("/{bookId}/reviews")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Review> getReviewsOfBook(@PathVariable("bookId") Integer bookId){
-    	return bookService.getBookReviews(bookId);
     }
 
     // @PostMapping(consumes="application/json")
@@ -92,7 +88,7 @@ public class BookController {
     //     return bookService.addBook(book);
     // }
 
-    @PostMapping(consumes="application/json")
+    @PostMapping(path="/books", consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Book createBook(@Valid @RequestBody Book book){ 
         return bookService.addBook(book);
@@ -106,19 +102,27 @@ public class BookController {
     //     return bookService.updateBook(bookId, book);
     // }
 
-    @PutMapping(path="/{bookId}", consumes="application/json")
+    @PutMapping(path="/books/{bookId}", consumes="application/json")
     @ResponseStatus(HttpStatus.OK)
     public Book updateBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Book book){
         return bookService.updateBook(bookId, book);
     }
 
-    @DeleteMapping("/{bookId}")
+    @DeleteMapping("/books/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable("bookId") Integer bookId){
         bookService.deleteBook(bookId);
     }
 
-    // @PostMapping(path="/{bookId}/reviews", consumes="application/json")
+    // reviews ---
+
+    @GetMapping("/reviews/{bookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Review> getReviewsOfBook(@PathVariable("bookId") Integer bookId){
+    	return bookService.getBookReviews(bookId);
+    }
+
+    // @PostMapping(path="/reviews/{bookId}", consumes="application/json")
     // @ResponseStatus(HttpStatus.CREATED)
     // public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Review review, Errors errors){
     //     // if(errors.hasErrors())
@@ -126,7 +130,7 @@ public class BookController {
     //     return bookService.addReviewToBook(bookId, review);
     // }
 
-    // @PostMapping(path="/{bookId}/reviews", consumes="application/json")
+    // @PostMapping(path="/reviews/{bookId}", consumes="application/json")
     // @ResponseStatus(HttpStatus.CREATED)
     // public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Review review){
     //     return bookService.addReviewToBook(bookId, review);
@@ -141,9 +145,9 @@ public class BookController {
         return review;
     }
 
-    @PostMapping(path="/{bookId}/reviews", consumes="application/json")
+    @PostMapping(path="/reviews/{bookId}", consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Review createBookReview(@PathVariable("bookId") Integer bookId, @Valid @RequestBody ReviewDto reviewDto){
+    public Review addReviewToBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody ReviewDto reviewDto){
         Review review = getReview(reviewDto);
         return bookService.addReviewToBook(bookId, review);
     }
@@ -155,7 +159,6 @@ public class BookController {
     }
 
     
-
     private String createErrorString(Errors result){
         StringBuilder sb =  new StringBuilder();
         result.getAllErrors().forEach(error -> {
