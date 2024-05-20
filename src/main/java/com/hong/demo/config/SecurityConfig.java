@@ -134,7 +134,7 @@ public class SecurityConfig {
             .csrf((csrf) -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
-                // .requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
+                // .requestMatchers(HttpMethod.GET, "/h2-console/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET).permitAll()
 
                 // .requestMatchers(HttpMethod.POST, "/api/books").hasRole("AUTOR")

@@ -24,8 +24,6 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = EnumNamePatternValidator.class)
 public @interface EnumNamePattern {
 
-    String name();
-
     /**
      * @return the regular expression to match
      */
@@ -34,7 +32,7 @@ public @interface EnumNamePattern {
     /**
      * @return the error message template
      */
-    String message() default "{name} must match \"{regexp}\"";
+    String message() default " must match \"{regexp}\"";
 
     /**
      * @return the groups the constraint belongs to

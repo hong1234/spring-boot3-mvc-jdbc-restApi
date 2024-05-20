@@ -7,8 +7,6 @@ import java.util.regex.PatternSyntaxException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-// import com.hong.demo.validation.EnumNamePattern;
-
 public class EnumNamePatternValidator implements ConstraintValidator<EnumNamePattern, Enum<?>> {
     private Pattern pattern;
 

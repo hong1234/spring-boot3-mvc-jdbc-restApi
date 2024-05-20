@@ -12,6 +12,7 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = StatusValidator.class)
 public @interface StatusValidation {
     String name();
+    
     //error message
     public String message() default "Invalid status:{name} must be Low, Medium or High";
     //represents group of constraints
