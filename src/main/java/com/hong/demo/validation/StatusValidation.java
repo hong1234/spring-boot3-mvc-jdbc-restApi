@@ -14,7 +14,7 @@ public @interface StatusValidation {
     String name();
     
     //error message
-    public String message() default "Invalid status:{name} must be Low, Medium or High";
+    public String message() default "{name} must be Low, Medium or High";
     //represents group of constraints
     public Class<?>[] groups() default {};
     //represents additional information about annotation

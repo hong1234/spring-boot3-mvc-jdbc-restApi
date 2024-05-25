@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 
 import org.springframework.http.HttpMethod;
 
@@ -28,18 +29,18 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import javax.sql.DataSource;
 
 
 @Configuration
-public class SecurityConfig {
+public class WebSecurityConfig {
 
     @Autowired
-    @Qualifier("delegatedAuthenticationEntryPoint")
-    AuthenticationEntryPoint authEntryPoint;
+    @Qualifier("customAuthenticationEntryPoint")
+    private AuthenticationEntryPoint authEntryPoint;
 
     @Autowired
     @Qualifier("customAccessDeniedHandler")
@@ -129,13 +130,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf((csrf) -> csrf.disable())
+            .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .securityMatcher("/api/**")
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
                 // .requestMatchers(HttpMethod.GET, "/h2-console/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET).permitAll()
+                // .requestMatchers(HttpMethod.GET).permitAll()
+                .requestMatchers(HttpMethod.GET).authenticated()
 
                 // .requestMatchers(HttpMethod.POST, "/api/books").hasRole("AUTOR")
                 // .requestMatchers(HttpMethod.PUT, "/api/books/{bookId}").hasRole("AUTOR")
@@ -146,17 +151,30 @@ public class SecurityConfig {
                 // .requestMatchers(HttpMethod.POST, "/api/reviews/{bookId}").hasRole("USER")
                 // .requestMatchers(HttpMethod.PUT, "/api/reviews/{reviewId}").hasRole("USER")
                 // .requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").hasRole("USER")
+
                 .requestMatchers("/api/reviews/**").hasRole("USER")
 
                 .anyRequest().denyAll()
             )
             // .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // This so embedded frames in h2-console are working
-            // .httpBasic(Customizer.withDefaults());
-
+            
+            // .httpBasic(Customizer.withDefaults())
+            
             .httpBasic(basic -> basic.authenticationEntryPoint(authEntryPoint))
             .exceptionHandling(customizer -> customizer.accessDeniedHandler(accessDeniedHandler))
             ;
         return http.build();
     }
+
+    @Bean                                                            
+	public SecurityFilterChain formLoginFilterChain(HttpSecurity http) throws Exception {
+		http
+			.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/login").permitAll()
+				.anyRequest().authenticated()
+			)
+			.formLogin(Customizer.withDefaults());
+		return http.build();
+	}
 
 }
