@@ -147,20 +147,18 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
                 // .requestMatchers(HttpMethod.GET, "/h2-console/**").hasRole("ADMIN")
-                // .requestMatchers(HttpMethod.GET).permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
 
-                // .requestMatchers(HttpMethod.POST, "/api/books").hasRole("AUTOR")
-                // .requestMatchers(HttpMethod.PUT, "/api/books/{bookId}").hasRole("AUTOR")
-                // .requestMatchers(HttpMethod.DELETE, "/api/books/{bookId}").hasRole("AUTOR")
+                // .requestMatchers("/api/books/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
 
-                .requestMatchers("/api/books/**").hasRole("AUTOR")
 
-                // .requestMatchers(HttpMethod.POST, "/api/reviews/{bookId}").hasRole("USER")
-                // .requestMatchers(HttpMethod.PUT, "/api/reviews/{reviewId}").hasRole("USER")
-                // .requestMatchers(HttpMethod.DELETE, "/api/reviews/{reviewId}").hasRole("USER")
-
-                .requestMatchers("/api/reviews/**").hasRole("USER")
+                // .requestMatchers("/api/reviews/**").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasRole("USER")
+                .requestMatchers(HttpMethod.PUT, "/api/reviews/**").hasRole("USER")
+                .requestMatchers(HttpMethod.DELETE, "/api/reviews/**").hasRole("ADMIN")
 
                 .anyRequest().denyAll()
             )
