@@ -38,12 +38,20 @@ import javax.sql.DataSource;
 @Configuration
 public class WebSecurityConfig {
 
+    // @Autowired
+    // @Qualifier("customAuthenticationEntryPoint")
+    // private AuthenticationEntryPoint authEntryPoint;
+
+    // @Autowired
+    // @Qualifier("customAccessDeniedHandler")
+    // private AccessDeniedHandler accessDeniedHandler;
+
     @Autowired
-    @Qualifier("customAuthenticationEntryPoint")
+    @Qualifier("delegatedAuthenticationEntryPoint")
     private AuthenticationEntryPoint authEntryPoint;
 
     @Autowired
-    @Qualifier("customAccessDeniedHandler")
+    @Qualifier("delegatedAccessDeniedHandler")
     private AccessDeniedHandler accessDeniedHandler;
 
     @Bean
@@ -140,7 +148,7 @@ public class WebSecurityConfig {
                 // .anyRequest().authenticated()
                 // .requestMatchers(HttpMethod.GET, "/h2-console/**").hasRole("ADMIN")
                 // .requestMatchers(HttpMethod.GET).permitAll()
-                .requestMatchers(HttpMethod.GET).authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
 
                 // .requestMatchers(HttpMethod.POST, "/api/books").hasRole("AUTOR")
                 // .requestMatchers(HttpMethod.PUT, "/api/books/{bookId}").hasRole("AUTOR")

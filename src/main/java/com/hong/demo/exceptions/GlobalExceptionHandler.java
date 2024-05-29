@@ -17,6 +17,8 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+// import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 
 // import org.springframework.http.HttpHeaders;
@@ -64,7 +66,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorDetails handleAuthenticationException(AuthenticationException e) {
+    public ErrorDetails handleAuthenticationException(Exception e) {
         ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setStatus(HttpStatus.UNAUTHORIZED);
         errorDetails.setMessage(e.getMessage());
@@ -73,7 +75,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorDetails forbidden(AccessDeniedException e) {
+    public ErrorDetails forbidden(Exception e) {
         ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setStatus(HttpStatus.FORBIDDEN);
         errorDetails.setMessage(e.getMessage());
@@ -86,6 +88,16 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setStatus(HttpStatus.NOT_FOUND);
         errorDetails.setMessage(e.getMessage());
+        return errorDetails;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ErrorDetails handlerNotFoundException(NoHandlerFoundException e) {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setStatus(HttpStatus.NOT_FOUND);
+        errorDetails.setMessage(e.getMessage());
+        // errorDetails.setMessage("URL is not correct");
         return errorDetails;
     }
 
