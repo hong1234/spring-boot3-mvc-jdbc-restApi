@@ -55,8 +55,8 @@ class MvcJdbcRestApiHApplicationTests {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-	// @Autowired
-	// private ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	/*
     * Add HTTP Authorization header, using Basic-Authentication to send user-credentials.
@@ -112,23 +112,19 @@ class MvcJdbcRestApiHApplicationTests {
 
 		try {
 			// JSON to Java mapping code
-			// Book book2 = objectMapper.readValue(response.getBody(), Book.class);
-			// assertThat(book2.getTitle()).isEqualTo("Exploring SpringBoot3");
+			Book book2 = objectMapper.readValue(response.getBody(), Book.class);
+			assertThat(book2.getTitle()).isEqualTo("Exploring SpringBoot3");
+		}  catch (JsonProcessingException e) {
+			System.out.println("Error occurred during JSON processing: " + e.getMessage());
+		}
 
-			// JSONObject jo = new JSONObject("{\"name\": \"John----\"}"); // 
-			// System.out.println(jo.getString("name"));
+		// try {
+		// 	JSONObject jo = new JSONObject(response.getBody());
+		// 	assertThat(jo.getString("title")).isEqualTo("Exploring SpringBoot3");
+		// } catch (JSONException e) {
+		// 	System.out.println("Error occurred during JSON parsing: " + e.getMessage());
+		// } 
 
-			JSONObject jo = new JSONObject(response.getBody());
-			assertThat(jo.getString("title")).isEqualTo("Exploring SpringBoot3");
-
-		} catch (JSONException e) {
-			System.out.println("Error occurred during JSON parsing: " + e.getMessage());
-		} 
-		// catch (Exception e) {
-		// 	System.out.println("Exception occurred: " + e.getMessage());
-		// }
-
-		
 	}
 
 	@Test
