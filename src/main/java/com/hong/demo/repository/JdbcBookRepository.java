@@ -80,7 +80,8 @@ public class JdbcBookRepository implements BookRepository {
         SqlParameterSource parameters = new MapSqlParameterSource()
 		.addValue("title", book.getTitle())
 		.addValue("content", book.getContent())
-        .addValue("created_on", Timestamp.valueOf(book.getCreatedOn()));
+        .addValue("created_on", Timestamp.valueOf(book.getCreatedOn()))
+        ;
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         

@@ -10,9 +10,9 @@
 	</parent>
 
 	<groupId>com.hong.demo</groupId>
-	<artifactId>MvcJdbcRestApiH</artifactId>
+	<artifactId>mvc-jdbc-rest-api-hong</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MvcJdbcRestApiH</name>
+	<name>mvc-jdbc-rest-api-hong</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
