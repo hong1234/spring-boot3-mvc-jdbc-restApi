@@ -53,7 +53,7 @@ import com.hong.demo.exceptions.ErrorDetails;
 @RestController
 @AllArgsConstructor
 @RequestMapping(path=BookController.CONTROLLER_PATH, produces="application/json")
-// @CrossOrigin(origins = {"http://localhost:3000", "http://uicloud.com"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://uicloud.com"})
 public class BookController {
 
     public static final String CONTROLLER_PATH = "/api";

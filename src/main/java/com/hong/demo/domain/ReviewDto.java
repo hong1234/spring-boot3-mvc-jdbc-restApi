@@ -33,7 +33,7 @@ public class ReviewDto {
 
     // @NotNull
     @NotBlank(message = "Content is mandatory")
-    @Size(min = 8, max = 500, message = "must be minimum 8 characters, and maximum 500 characters long")
+    @Size(min = 3, max = 500, message = "must be minimum 3 characters, and maximum 500 characters long")
     private String content;
 
     @NotNull(message = "likeStatus is mandatory")

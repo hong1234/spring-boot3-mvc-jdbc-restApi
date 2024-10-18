@@ -131,7 +131,7 @@ public class WebSecurityConfig {
 
         // userManager.createUser(hong);
         // userManager.createUser(admin);
-        // userManager.createUser(boss);
+        // userManager.createUser(boss); 
 
         usersInit(userManager);
         return userManager;
@@ -147,8 +147,9 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
                 // .requestMatchers(HttpMethod.GET, "/h2-console/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
-
+                // .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                
                 // .requestMatchers("/api/books/**").hasRole("AUTOR")
                 .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("AUTOR")
                 .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("AUTOR")
