@@ -6,7 +6,9 @@ import com.hong.demo.domain.Book;
 
 public interface BookRepository {
     Book findById(Integer id);
+
     Iterable<Book> searchByTitle(String title);
+    
     Iterable<Book> findAll();
 
     Book addBook(Book book);

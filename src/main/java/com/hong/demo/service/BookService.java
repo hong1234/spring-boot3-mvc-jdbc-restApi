@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 // import lombok.extern.slf4j.Slf4j;
 
 
-// @Slf4j
+// @Slf4j 
 @Service
 @AllArgsConstructor
 public class BookService {
@@ -40,13 +40,10 @@ public class BookService {
     }
 
     public Book getBookById(Integer bookId){
-        Book book = bookRepository.findById(bookId);
-        if(book != null){
-            book.setReviews(reviewRepository.getReviewsOfBook(bookId));
-        } else {
-            throw new ResourceNotFoundException("Book with Id="+bookId+" not found");
-        }
-        return book;
+        // Book book = bookRepository.findById(bookId);
+        // book.setReviews(reviewRepository.getReviewsOfBook(bookId));
+        // return book;
+        return bookRepository.findById(bookId);
     }
 
     public Book addBook(Book book){

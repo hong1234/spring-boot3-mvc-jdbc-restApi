@@ -23,11 +23,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.hong.demo.domain.Book;
+import com.hong.demo.exceptions.ResourceNotFoundException;
 
 import lombok.AllArgsConstructor;
 // import lombok.extern.slf4j.Slf4j;
+
 
 @Repository
 @AllArgsConstructor
@@ -53,15 +56,27 @@ public class JdbcBookRepository implements BookRepository {
     // @Autowired
     // BookRowMapper bookRowMapper;
 
+    // @Override
+    // public Book findById(Integer bookId){
+    //     try {
+    //         SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", bookId);
+    //         return jdbcTemplate.queryForObject(SQL_QUERY_BY_ID, parameters, bookRowMapper);
+    //     } catch (IncorrectResultSizeDataAccessException e) {
+    //         throw new ResourceNotFoundException("book with ID="+bookId.toString()+" not found");
+    //     }
+    // }
+
     @Override
-    public Book findById(Integer bookId){
-        try {
-            SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", bookId);
-            // jdbcTemplate.queryForObject(String sql, SqlParameterSource paramSource, RowMapper<T> rowMapper)
-            return jdbcTemplate.queryForObject(SQL_QUERY_BY_ID, parameters, bookRowMapper);
-        } catch (EmptyResultDataAccessException ex) {
-            return null;
-        }
+    public Book findById(Integer bookId) {
+        String sql = """
+                SELECT b.id, b.title, b.content, b.created_on, b.updated_on, r.id AS review_id, r.name, r.email, r.content AS content2, r.like_status, r.created_on AS created_on2, r.updated_on AS updated_on2
+                FROM books b LEFT JOIN reviews r ON b.id = r.book_id WHERE b.id = :bookId
+                """;
+        SqlParameterSource parameters = new MapSqlParameterSource().addValue("bookId", bookId);
+        Book result = jdbcTemplate.query(sql, parameters, new BookMapExtractor());
+        if(result == null)
+            throw new ResourceNotFoundException("book with ID="+bookId.toString()+" not found");
+        return result;
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.Collection;
 public interface  CommonRepository<T> {
 
     public Iterable<T> findAll();
+    
     public T findById(String id);
 
     public T save(T domain);
