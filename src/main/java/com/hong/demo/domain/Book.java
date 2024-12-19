@@ -5,9 +5,13 @@ package com.hong.demo.domain;
 // import lombok.NoArgsConstructor;
 // import lombok.AllArgsConstructor;
 import lombok.Data;
- 
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 // import java.util.Date;
+
+// import javax.smartcardio.Card;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +23,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 // import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.UUID;
 
 
 @Data
@@ -43,4 +48,7 @@ public class Book {
     private LocalDateTime updatedOn;
     
     private List<Review> reviews; 
+
+    // private Map<UUID, Image> cards = new HashMap<>();
+    private List<Image> images;
 }

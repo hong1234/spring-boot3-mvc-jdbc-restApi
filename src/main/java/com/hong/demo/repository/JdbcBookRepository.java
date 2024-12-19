@@ -26,6 +26,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import com.hong.demo.domain.Book;
+import com.hong.demo.domain.Review;
+import com.hong.demo.domain.Image;
 import com.hong.demo.exceptions.ResourceNotFoundException;
 
 import lombok.AllArgsConstructor;
@@ -127,6 +129,16 @@ public class JdbcBookRepository implements BookRepository {
     public void deleteById(Integer bookId){
         SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", bookId);
         jdbcTemplate.update(SQL_DELETE, parameters);
+    }
+
+    // images
+
+    // @Override
+    public List<Image> getImagesOfBook(Integer bookId){
+        String sql = "select * from images where book_id = :bookId";
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("bookId", bookId);
+        return jdbcTemplate.query(sql, parameters, new ImageRowMapper());
     }
 
 }

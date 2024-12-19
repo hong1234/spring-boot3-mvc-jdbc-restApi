@@ -1,5 +1,6 @@
 -- H2 or MySQL --
 
+DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS books;
 
@@ -31,20 +32,18 @@ CREATE TABLE reviews (
   -- created_on datetime DEFAULT NULL,
   -- updated_on datetime DEFAULT NULL,
   -- PRIMARY KEY (id),
-  FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
+  constraint fk_book_id_reviews FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
 ) ;
 
--- create table users(
--- 	username varchar_ignorecase(50) not null primary key,
--- 	password varchar_ignorecase(500) not null,
--- 	enabled boolean not null
--- );
-
--- create table authorities (
--- 	username varchar_ignorecase(50) not null,
--- 	authority varchar_ignorecase(50) not null,
--- 	constraint fk_authorities_users foreign key(username) references users(username)
--- );
+CREATE TABLE images
+(
+  book_id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  uuid  VARCHAR(255) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  UNIQUE(uuid),
+  constraint fk_book_id_images FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
+);
 
 create table users(
 	username varchar(50) not null primary key,

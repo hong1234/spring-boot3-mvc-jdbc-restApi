@@ -43,7 +43,10 @@ public class BookService {
         // Book book = bookRepository.findById(bookId);
         // book.setReviews(reviewRepository.getReviewsOfBook(bookId));
         // return book;
-        return bookRepository.findById(bookId);
+
+        Book book = bookRepository.findById(bookId);
+        book.setImages(bookRepository.getImagesOfBook(bookId));
+        return book;
     }
 
     public Book addBook(Book book){
