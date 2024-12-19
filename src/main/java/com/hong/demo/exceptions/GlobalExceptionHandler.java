@@ -109,6 +109,15 @@ public class GlobalExceptionHandler {
     //     return errorDetails;
     // }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateException.class)
+    public ErrorDetails duplicateException(DuplicateException e) {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setStatus(HttpStatus.BAD_REQUEST);
+        errorDetails.setMessage(e.getMessage());
+        return errorDetails;
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorDetails otherExceptions(Exception e) {

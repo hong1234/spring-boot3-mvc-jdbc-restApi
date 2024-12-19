@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
 
+import com.hong.demo.domain.Image;
 import com.hong.demo.domain.Book;
 import com.hong.demo.domain.Review;
 import com.hong.demo.repository.BookRepository;
@@ -42,13 +43,13 @@ public class BookService {
     public Book getBookById(Integer bookId){
         // Book book = bookRepository.findById(bookId);
         // book.setReviews(reviewRepository.getReviewsOfBook(bookId));
+        // book.setImages(bookRepository.getImagesOfBook(bookId));
         // return book;
 
-        Book book = bookRepository.findById(bookId);
-        book.setImages(bookRepository.getImagesOfBook(bookId));
-        return book;
+        return bookRepository.findById(bookId);
     }
 
+    @Transactional
     public Book addBook(Book book){
         return bookRepository.addBook(book);
     }
@@ -76,11 +77,18 @@ public class BookService {
 
     public Review addReviewToBook(Integer bookId, Review review){
         bookRepository.findById(bookId);
-        return reviewRepository.addReview(bookId, review);
+        review.setBookId(bookId);
+        return reviewRepository.addReview(review);
     }
 
     public void deleteReview(Integer reviewId){
         reviewRepository.deleteById(reviewId);
     }  
+
+    public Image addImageToBook(Integer bookId, Image image){
+        bookRepository.findById(bookId);
+        image.setBookId(bookId);
+        return bookRepository.addImage(image);
+    }
 
 }

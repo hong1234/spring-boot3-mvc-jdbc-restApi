@@ -35,6 +35,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import com.hong.demo.domain.Image;
 import com.hong.demo.domain.Review;
 import com.hong.demo.domain.ReviewDto;
 import com.hong.demo.domain.Book;
@@ -155,6 +156,14 @@ public class BookController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookReview(@PathVariable("reviewId") Integer reviewId){
         bookService.deleteReview(reviewId);
+    }
+
+    // images
+
+    @PostMapping(path="/images/{bookId}", consumes="application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Image addImageToBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Image image){
+        return bookService.addImageToBook(bookId, image);
     }
 
     

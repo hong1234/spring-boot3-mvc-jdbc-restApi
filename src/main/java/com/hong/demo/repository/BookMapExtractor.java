@@ -14,6 +14,7 @@ import java.util.List;
 import com.hong.demo.domain.Book;
 import com.hong.demo.domain.Review;
 import com.hong.demo.domain.LikeStatus;
+import com.hong.demo.domain.Image;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ public class BookMapExtractor implements ResultSetExtractor<Book> {
     public Book extractData(ResultSet rs) throws SQLException, DataAccessException {
         Book book = null;
         Map<String, Review> reviewMap = new HashMap<>();
+        Map<String, Image> imageMap = new HashMap<>();
 
         while (rs.next()) {
             if (book == null) {
@@ -46,11 +48,23 @@ public class BookMapExtractor implements ResultSetExtractor<Book> {
 
                 reviewMap.put(Integer.toString(review.getId()), review);
             }
+
+            if (rs.getString("image_id") != null){
+                Image image = new Image();
+                image.setId(rs.getInt("image_id"));
+                image.setUuid(rs.getString("uuid"));
+                image.setTitle(rs.getString("image_title"));
+                image.setBookId(book.getId());
+
+                imageMap.put(Integer.toString(image.getId()), image);
+            }
         }
 
         if(book != null){
             List<Review> reviews = new ArrayList<>(reviewMap.values());
             book.setReviews(reviews);
+            List<Image> images = new ArrayList<>(imageMap.values());
+            book.setImages(images);
         }
         return book;
     }

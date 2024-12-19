@@ -155,6 +155,11 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("AUTOR")
                 .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
 
+                // .requestMatchers("/api/images/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.POST, "/api/images/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.PUT, "/api/images/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/images/**").hasRole("ADMIN")
+
 
                 // .requestMatchers("/api/reviews/**").hasRole("USER")
                 .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasRole("USER")

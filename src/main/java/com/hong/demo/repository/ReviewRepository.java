@@ -10,7 +10,7 @@ public interface ReviewRepository {
     Review findById(Integer id);
     // Iterable<Review> findAll();
     
-    Review addReview(Integer bookId, Review review);
+    Review addReview(Review review);
     
     void deleteById(Integer id);
 

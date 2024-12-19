@@ -7,17 +7,19 @@ import com.hong.demo.domain.Image;
 import java.util.*;
 
 public interface BookRepository {
-    Book findById(Integer id);
 
-    Iterable<Book> searchByTitle(String title);
-    
+    Book findById(Integer id);
+    Book findByTitle(String title);
+
     Iterable<Book> findAll();
+    Iterable<Book> searchByTitle(String title);
 
     Book addBook(Book book);
-
     Book updateBook(Book book);
 
     void deleteById(Integer id);
 
     List<Image> getImagesOfBook(Integer bookId);
+
+    Image addImage(Image book);
 }

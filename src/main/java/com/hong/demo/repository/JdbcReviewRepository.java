@@ -20,6 +20,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.hong.demo.domain.Review;
+import com.hong.demo.exceptions.ResourceNotFoundException;
 import com.hong.demo.domain.LikeStatus;
 
 import lombok.AllArgsConstructor;
@@ -43,13 +44,11 @@ public class JdbcReviewRepository implements ReviewRepository {
 
     @Override
     public Review findById(Integer reviewId){
-        try {
-            SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", reviewId);
-            // jdbcTemplate.queryForObject(String sql, SqlParameterSource paramSource, RowMapper<T> rowMapper)
-            return jdbcTemplate.queryForObject(SQL_QUERY_FIND_BY_ID, parameters, reviewRowMapper);
-        } catch (EmptyResultDataAccessException ex) {
-            return null;
-        }
+        SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", reviewId);
+        Review review = jdbcTemplate.queryForObject(SQL_QUERY_FIND_BY_ID, parameters, reviewRowMapper);
+        if(review == null)
+            throw new ResourceNotFoundException("review with Id="+reviewId.toString()+" not found");
+        return review;
     }
 
     @Override
@@ -59,9 +58,9 @@ public class JdbcReviewRepository implements ReviewRepository {
     }
 
     @Override
-    public Review addReview(Integer bookId, Review review) {
+    public Review addReview(Review review) {
         SqlParameterSource parameters = new MapSqlParameterSource()
-        .addValue("bookId", bookId)
+        .addValue("bookId", review.getBookId())
 		.addValue("name", review.getName())
         .addValue("email", review.getEmail())
 		.addValue("content", review.getContent())

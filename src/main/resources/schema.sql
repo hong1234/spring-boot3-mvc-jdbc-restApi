@@ -9,12 +9,13 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE books (
   id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  -- uuid  VARCHAR(255) NOT NULL,
   title varchar(150) NOT NULL,
   content varchar(500) NOT NULL,
   created_on timestamp DEFAULT NULL,
-  updated_on timestamp DEFAULT NULL
+  updated_on timestamp DEFAULT NULL,
   -- created_on datetime DEFAULT NULL,
-  -- updated_on datetime DEFAULT NULL
+  UNIQUE(title)
   -- PRIMARY KEY (id)
 );
 
@@ -41,7 +42,6 @@ CREATE TABLE images
   id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   uuid  VARCHAR(255) NOT NULL,
   title VARCHAR(255) NOT NULL,
-  UNIQUE(uuid),
   constraint fk_book_id_images FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
 );
 
@@ -57,7 +57,7 @@ create table authorities (
 	constraint fk_authorities_users foreign key(username) references users(username)
 );
 
-create index ix_book_title on books (title);
+-- create index ix_book_title on books (title);
 
 create unique index ix_auth_username on authorities (username,authority);
 
