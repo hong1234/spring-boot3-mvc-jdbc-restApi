@@ -6,7 +6,7 @@ package com.hong.demo.repository;
 // import java.sql.SQLException;
 // import java.sql.Date;
 import java.sql.Timestamp;
-
+import java.time.LocalDateTime;
 import java.util.*;
 // import java.util.Set;
 
@@ -69,13 +69,16 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public Book findById(Integer bookId) {
         String sql = """
-                SELECT b.id, b.title, b.content, b.created_on, b.updated_on, r.id AS review_id, r.name, r.email, r.content AS content2, r.like_status, r.created_on AS created_on2, r.updated_on AS updated_on2
-                FROM books b LEFT JOIN reviews r ON b.id = r.book_id WHERE b.id = :bookId
+                SELECT b.id, b.title, b.content, b.created_on, b.updated_on, 
+                r.id AS review_id, r.name, r.email, r.content AS content2, r.like_status, r.created_on AS created_on2, r.updated_on AS updated_on2
+                FROM books b 
+                LEFT JOIN reviews r ON b.id = r.book_id 
+                WHERE b.id = :bookId
                 """;
         SqlParameterSource parameters = new MapSqlParameterSource().addValue("bookId", bookId);
         Book result = jdbcTemplate.query(sql, parameters, new BookMapExtractor());
         if(result == null)
-            throw new ResourceNotFoundException("book with ID="+bookId.toString()+" not found");
+            throw new ResourceNotFoundException("book with Id="+bookId.toString()+" not found");
         return result;
     }
 
@@ -95,7 +98,7 @@ public class JdbcBookRepository implements BookRepository {
         SqlParameterSource parameters = new MapSqlParameterSource()
 		.addValue("title", book.getTitle())
 		.addValue("content", book.getContent())
-        .addValue("created_on", Timestamp.valueOf(book.getCreatedOn()))
+        .addValue("created_on", Timestamp.valueOf(LocalDateTime.now()))
         ;
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();

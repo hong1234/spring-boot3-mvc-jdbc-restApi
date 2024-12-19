@@ -15,6 +15,7 @@ public interface ReviewRepository {
     void deleteById(Integer id);
 
     List<Review> getReviewsOfBook(Integer bookId);
+    
     void deleteViewsOfBook(Integer bookId);
 }
 

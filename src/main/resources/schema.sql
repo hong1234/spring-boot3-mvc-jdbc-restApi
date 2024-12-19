@@ -17,6 +17,8 @@ CREATE TABLE books (
   -- PRIMARY KEY (id)
 );
 
+-- ALTER TABLE books ADD INDEX (title);
+
 CREATE TABLE reviews (
   book_id int NOT NULL,
   id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -29,20 +31,34 @@ CREATE TABLE reviews (
   -- created_on datetime DEFAULT NULL,
   -- updated_on datetime DEFAULT NULL,
   -- PRIMARY KEY (id),
-  FOREIGN KEY (book_id) REFERENCES books (id)
+  FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
 ) ;
 
+-- create table users(
+-- 	username varchar_ignorecase(50) not null primary key,
+-- 	password varchar_ignorecase(500) not null,
+-- 	enabled boolean not null
+-- );
+
+-- create table authorities (
+-- 	username varchar_ignorecase(50) not null,
+-- 	authority varchar_ignorecase(50) not null,
+-- 	constraint fk_authorities_users foreign key(username) references users(username)
+-- );
+
 create table users(
-	username varchar_ignorecase(50) not null primary key,
-	password varchar_ignorecase(500) not null,
+	username varchar(50) not null primary key,
+	password varchar(500) not null,
 	enabled boolean not null
 );
 
 create table authorities (
-	username varchar_ignorecase(50) not null,
-	authority varchar_ignorecase(50) not null,
+	username varchar(50) not null,
+	authority varchar(50) not null,
 	constraint fk_authorities_users foreign key(username) references users(username)
 );
+
+create index ix_book_title on books (title);
 
 create unique index ix_auth_username on authorities (username,authority);
 

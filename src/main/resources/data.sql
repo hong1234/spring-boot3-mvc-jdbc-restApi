@@ -1,10 +1,6 @@
 insert into books(title, content, created_on) values 
 ('Introducing SpringBoot', 'SpringBoot is awesome', CURRENT_TIMESTAMP),
-
--- insert into books(title, content, created_on)
 ('Securing Web applications', 'This post will show how to use SpringSecurity', CURRENT_TIMESTAMP),
-
--- insert into books(title, content, created_on)
 ('Introducing Spring Social', 'Developing social web applications using Spring Social', CURRENT_TIMESTAMP)
 ;
 

@@ -64,13 +64,9 @@ public class BookService {
 
     @Transactional
     public void deleteBook(Integer bookId){
-        Book book = bookRepository.findById(bookId);
-        if(book != null){
-            reviewRepository.deleteViewsOfBook(bookId);
-            bookRepository.deleteById(bookId);
-        } else {
-            throw new ResourceNotFoundException("Book with Id="+bookId+" not found");
-        }
+        bookRepository.findById(bookId);
+        // reviewRepository.deleteViewsOfBook(bookId);
+        bookRepository.deleteById(bookId);
     }
 
     public List<Review> getBookReviews(Integer bookId){

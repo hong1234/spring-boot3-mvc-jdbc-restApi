@@ -37,7 +37,7 @@ public class Book {
     private String content;
     
     // @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Berlin")
-    private LocalDateTime createdOn = LocalDateTime.now();
+    private LocalDateTime createdOn; // LocalDateTime.now();
 
     // @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Berlin")
     private LocalDateTime updatedOn;
