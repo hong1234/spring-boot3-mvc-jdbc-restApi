@@ -35,19 +35,18 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-
 import com.hong.demo.domain.Review;
 import com.hong.demo.domain.ReviewDto;
 import com.hong.demo.domain.Book;
 import com.hong.demo.domain.LikeStatus;
 
-import com.hong.demo.repository.ReviewRepository;
-import com.hong.demo.repository.BookRepository;
+// import com.hong.demo.repository.ReviewRepository;
+// import com.hong.demo.repository.BookRepository;
+
 import com.hong.demo.service.BookService;
 
-import com.hong.demo.exceptions.ResourceNotFoundException;
-import com.hong.demo.exceptions.ValidationException;
-import com.hong.demo.exceptions.ErrorDetails;
+// import com.hong.demo.exceptions.ValidationException;
+// import com.hong.demo.exceptions.ErrorDetails;
 
 
 @RestController

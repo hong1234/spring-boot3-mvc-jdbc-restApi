@@ -75,8 +75,10 @@ public class JdbcBookRepository implements BookRepository {
                 LEFT JOIN reviews r ON b.id = r.book_id 
                 WHERE b.id = :bookId
                 """;
+
         SqlParameterSource parameters = new MapSqlParameterSource().addValue("bookId", bookId);
         Book result = jdbcTemplate.query(sql, parameters, new BookMapExtractor());
+
         if(result == null)
             throw new ResourceNotFoundException("book with Id="+bookId.toString()+" not found");
         return result;
@@ -102,9 +104,7 @@ public class JdbcBookRepository implements BookRepository {
         ;
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        
         // jdbcTemplate.update(String sql, SqlParameterSource paramSource);
-        // jdbcTemplate.update(String sql, SqlParameterSource paramSource, KeyHolder generatedKeyHolder);
         jdbcTemplate.update(SQL_INSERT, parameters, generatedKeyHolder);
 
         Number key = generatedKeyHolder.getKey();

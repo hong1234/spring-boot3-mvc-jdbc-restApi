@@ -52,14 +52,10 @@ public class BookService {
 
     public Book updateBook(Integer bookId, Book book){
         Book storedBook = bookRepository.findById(bookId);
-        if(storedBook != null){
-            storedBook.setTitle(book.getTitle());
-            storedBook.setContent(book.getContent());
-            storedBook.setUpdatedOn(LocalDateTime.now());
-            return bookRepository.updateBook(storedBook);
-        } else {
-            throw new ResourceNotFoundException("Book with Id="+bookId+" not found");
-        }
+        storedBook.setTitle(book.getTitle());
+        storedBook.setContent(book.getContent());
+        storedBook.setUpdatedOn(LocalDateTime.now());
+        return bookRepository.updateBook(storedBook);
     }
 
     @Transactional
@@ -70,16 +66,14 @@ public class BookService {
     }
 
     public List<Review> getBookReviews(Integer bookId){
-        return reviewRepository.getReviewsOfBook(bookId);
+        // return reviewRepository.getReviewsOfBook(bookId);
+        Book book = bookRepository.findById(bookId);
+        return book.getReviews();
     }
 
     public Review addReviewToBook(Integer bookId, Review review){
-        Book book = bookRepository.findById(bookId);
-        if(book != null){
-            return reviewRepository.addReview(bookId, review);
-        } else {
-            throw new ResourceNotFoundException("Book with Id="+bookId+" not found");
-        }
+        bookRepository.findById(bookId);
+        return reviewRepository.addReview(bookId, review);
     }
 
     public void deleteReview(Integer reviewId){
