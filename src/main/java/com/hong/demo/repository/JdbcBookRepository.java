@@ -47,8 +47,8 @@ import lombok.AllArgsConstructor;
 public class JdbcBookRepository implements BookRepository { 
 
     private static final String SQL_QUERY_FIND_ALL = "select * from books";
-    private static final String SQL_QUERY_BY_ID = SQL_QUERY_FIND_ALL + " where id = :id";
-    private static final String SQL_QUERY_BY_TITLE = SQL_QUERY_FIND_ALL + " where title like :title";
+    // private static final String SQL_QUERY_BY_ID = SQL_QUERY_FIND_ALL + " where id = :id";
+    private static final String SQL_QUERY_BY_TITLE = SQL_QUERY_FIND_ALL + " where title LIKE :title";
 
     private static final String SQL_INSERT = "insert into books (title, content, created_on) values (:title, :content, :created_on)";
     private static final String SQL_UPDATE = "update books set title = :title, content = :content, updated_on = :updated_on where id = :id";
@@ -66,18 +66,39 @@ public class JdbcBookRepository implements BookRepository {
     // @Autowired
     // BookRowMapper bookRowMapper;
 
-    // @Override
-    // public Book findById(Integer bookId){
-    //     try {
-    //         SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", bookId);
-    //         return jdbcTemplate.queryForObject(SQL_QUERY_BY_ID, parameters, bookRowMapper);
-    //     } catch (IncorrectResultSizeDataAccessException e) {
-    //         throw new ResourceNotFoundException("book with ID="+bookId.toString()+" not found");
-    //     }
-    // }
+    @Override
+    public boolean findById(Integer bookId){
+        String sql = "SELECT * FROM books WHERE id = :bookId";
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("bookId", bookId);
+        boolean rs = jdbcTemplate.queryForRowSet(sql, parameters).first();
+        if(!rs)
+            throw new ResourceNotFoundException("book with Id="+bookId.toString()+" not found");
+        return rs;
+    }
 
     @Override
-    public Book findById(Integer bookId) {
+    public boolean findByTitle(String title){
+        String sql = "SELECT * FROM books WHERE title = :title";
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("title", title);
+        return jdbcTemplate.queryForRowSet(sql, parameters).first();
+    }
+
+    @Override
+    public Iterable<Book> getAllBooks(){
+        return jdbcTemplate.query(SQL_QUERY_FIND_ALL, bookRowMapper);
+    }
+
+    @Override
+    public Iterable<Book> searchByTitle(String title){
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("title", "%"+title+"%");
+        return jdbcTemplate.query(SQL_QUERY_BY_TITLE, parameters, bookRowMapper);
+    }
+
+    @Override
+    public Book getBookById(Integer bookId) {
         String sql = """
                 SELECT b.id, b.title, b.content, b.created_on, b.updated_on, 
                 r.id AS review_id, r.name, r.email, r.content AS content2, r.like_status, r.created_on AS created_on2, r.updated_on AS updated_on2,
@@ -91,54 +112,28 @@ public class JdbcBookRepository implements BookRepository {
         SqlParameterSource parameters = new MapSqlParameterSource().addValue("bookId", bookId);
         Book result = jdbcTemplate.query(sql, parameters, new BookMapExtractor());
 
+        // return jdbcTemplate.query(sql, parameters, new ResultSetExtractor<Book>() {
+        //     @Override
+        //     public Book extractData(ResultSet rs) throws SQLException, DataAccessException {
+        //         Book book = null;
+        //         while (rs.next()) {
+        //             if (book == null) {
+        //                 book = new Book();
+        //                 ...
+        //             }
+        //             ...
+        //         }
+        //         return book; 
+        //     }
+        // });
+
         if(result == null)
             throw new ResourceNotFoundException("book with Id="+bookId.toString()+" not found");
         return result;
     }
 
     @Override
-    public Iterable<Book> findAll(){
-        return jdbcTemplate.query(SQL_QUERY_FIND_ALL, bookRowMapper);
-    }
-
-    @Override
-    public Iterable<Book> searchByTitle(String title){
-        SqlParameterSource parameters = new MapSqlParameterSource()
-        .addValue("title", "%"+title+"%");
-        return jdbcTemplate.query(SQL_QUERY_BY_TITLE, parameters, bookRowMapper);
-    }
-
-    @Override
-    public Book findByTitle(String title){
-        String sql = "SELECT * FROM books WHERE title = :title";
-        SqlParameterSource parameters = new MapSqlParameterSource()
-        .addValue("title", title);
-
-        return jdbcTemplate.query(sql, parameters, new ResultSetExtractor<Book>() {
-            @Override
-            public Book extractData(ResultSet rs) throws SQLException, DataAccessException {
-                Book book = null;
-                while (rs.next()) {
-                    if (book == null) {
-                        book = new Book();
-                        book.setId(rs.getInt("id"));
-                        book.setTitle(rs.getString("title"));
-                        book.setContent(rs.getString("content"));
-                        // book.setCreatedOn(convertToLocalDateTime(rs.getTimestamp("created_on")));
-                        // book.setUpdatedOn(convertToLocalDateTime(rs.getTimestamp("updated_on")));
-                    }
-                }
-                return book;
-            }
-        });
-    }
-
-    @Override
     public Book addBook(Book book) {
-        Book result = findByTitle(book.getTitle());
-        if(result != null)
-            throw new DuplicateException("book title: '" + book.getTitle() + "' already exists.");
-        
         SqlParameterSource parameters = new MapSqlParameterSource()
 		.addValue("title", book.getTitle())
 		.addValue("content", book.getContent())
@@ -153,7 +148,7 @@ public class JdbcBookRepository implements BookRepository {
         // }
         
         Number key = generatedKeyHolder.getKey();
-        return findById(key.intValue());
+        return getBookById(key.intValue());
     }
 
     @Override
@@ -184,7 +179,7 @@ public class JdbcBookRepository implements BookRepository {
         return jdbcTemplate.query(sql, parameters, new ImageRowMapper());
     }
 
-    public Image findImageById(Integer imageId){
+    public Image getImageById(Integer imageId){
         String sql = "select * from images where id = :imageId";
         SqlParameterSource parameters = new MapSqlParameterSource()
         .addValue("imageId", imageId);
@@ -205,7 +200,7 @@ public class JdbcBookRepository implements BookRepository {
         jdbcTemplate.update(sql, parameters, generatedKeyHolder);
 
         Number key = generatedKeyHolder.getKey();
-        return findImageById(key.intValue());
+        return getImageById(key.intValue());
     }
 
 }

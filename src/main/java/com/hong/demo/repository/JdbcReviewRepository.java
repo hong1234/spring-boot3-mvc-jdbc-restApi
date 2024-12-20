@@ -43,7 +43,7 @@ public class JdbcReviewRepository implements ReviewRepository {
     private final ReviewRowMapper reviewRowMapper;
 
     @Override
-    public Review findById(Integer reviewId){
+    public Review getReviewById(Integer reviewId){
         SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", reviewId);
         Review review = jdbcTemplate.queryForObject(SQL_QUERY_FIND_BY_ID, parameters, reviewRowMapper);
         if(review == null)
@@ -75,7 +75,7 @@ public class JdbcReviewRepository implements ReviewRepository {
         jdbcTemplate.update(SQL_INSERT, parameters, generatedKeyHolder);
 
         Number key = generatedKeyHolder.getKey();
-        return findById(key.intValue());
+        return getReviewById(key.intValue());
     }
 
     @Override

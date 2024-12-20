@@ -18,11 +18,11 @@ import com.hong.demo.repository.ReviewRepository;
 
 import com.hong.demo.exceptions.ResourceNotFoundException;
 import com.hong.demo.exceptions.SpringAppException;
+import com.hong.demo.exceptions.DuplicateException;
 import com.hong.demo.exceptions.ErrorDetails;
 
 import lombok.AllArgsConstructor;
 // import lombok.extern.slf4j.Slf4j;
-
 
 // @Slf4j 
 @Service
@@ -33,7 +33,7 @@ public class BookService {
     private final ReviewRepository reviewRepository;
 
     public Iterable<Book> bookList(){
-        return bookRepository.findAll();
+        return bookRepository.getAllBooks();
     }
 
     public Iterable<Book> searchBooksByTitle(String title){
@@ -41,21 +41,18 @@ public class BookService {
     }
 
     public Book getBookById(Integer bookId){
-        // Book book = bookRepository.findById(bookId);
-        // book.setReviews(reviewRepository.getReviewsOfBook(bookId));
-        // book.setImages(bookRepository.getImagesOfBook(bookId));
-        // return book;
-
-        return bookRepository.findById(bookId);
+        return bookRepository.getBookById(bookId);
     }
 
     @Transactional
     public Book addBook(Book book){
+        if(bookRepository.findByTitle(book.getTitle()))
+            throw new DuplicateException("book title: '" + book.getTitle() + "' already exists.");
         return bookRepository.addBook(book);
     }
 
     public Book updateBook(Integer bookId, Book book){
-        Book storedBook = bookRepository.findById(bookId);
+        Book storedBook = bookRepository.getBookById(bookId);
         storedBook.setTitle(book.getTitle());
         storedBook.setContent(book.getContent());
         storedBook.setUpdatedOn(LocalDateTime.now());
@@ -71,7 +68,7 @@ public class BookService {
 
     public List<Review> getBookReviews(Integer bookId){
         // return reviewRepository.getReviewsOfBook(bookId);
-        Book book = bookRepository.findById(bookId);
+        Book book = bookRepository.getBookById(bookId);
         return book.getReviews();
     }
 

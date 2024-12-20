@@ -1,5 +1,4 @@
 -- H2 or MySQL --
-
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS books;

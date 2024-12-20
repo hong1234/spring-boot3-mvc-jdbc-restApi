@@ -8,18 +8,19 @@ import java.util.*;
 
 public interface BookRepository {
 
-    Book findById(Integer id);
-    Book findByTitle(String title);
+    boolean findById(Integer bookId);
+    boolean findByTitle(String title);
 
-    Iterable<Book> findAll();
+    Iterable<Book> getAllBooks();
     Iterable<Book> searchByTitle(String title);
 
+    Book getBookById(Integer id);
     Book addBook(Book book);
     Book updateBook(Book book);
 
     void deleteById(Integer id);
 
-    List<Image> getImagesOfBook(Integer bookId);
+    Iterable<Image> getImagesOfBook(Integer bookId);
 
     Image addImage(Image book);
 }

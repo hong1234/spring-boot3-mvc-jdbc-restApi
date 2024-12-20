@@ -12,7 +12,6 @@ insert into reviews(book_id, name, email, content, like_status, created_on) valu
 ;
 
 -- MySQL --
-
 -- insert into images(book_id, uuid, title) values
 -- (1, uuid(), 'ok man'),
 -- (2, uuid(), 'mamamia'),
@@ -21,7 +20,6 @@ insert into reviews(book_id, name, email, content, like_status, created_on) valu
 -- ;
 
 -- H2 --
-
 insert into images(book_id, uuid, title) values
 (1, random_uuid(), 'ok man'),
 (2, random_uuid(), 'mamamia'),
