@@ -40,6 +40,8 @@ import com.hong.demo.domain.Review;
 import com.hong.demo.domain.ReviewDto;
 import com.hong.demo.domain.Book;
 import com.hong.demo.domain.LikeStatus;
+import com.hong.demo.domain.Category;
+import com.hong.demo.domain.CategoryBook;
 
 // import com.hong.demo.repository.ReviewRepository;
 // import com.hong.demo.repository.BookRepository;
@@ -60,6 +62,26 @@ public class BookController {
 
     private final BookService bookService;
 
+    // categories ---
+
+    @GetMapping("/categories")
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Category> getAllCategories(){
+        return bookService.getAllCategories();
+    }
+
+    @GetMapping("/categories/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Category getCategoryById(@PathVariable("categoryId") Integer categoryId){
+        return bookService.getCategoryById(categoryId);
+    }
+
+    @PostMapping(path="/categories/book", consumes="application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void assignCategoryBook(@Valid @RequestBody CategoryBook cabo){ 
+        bookService.assignCategoryBook(cabo);
+    }
+
     // books ---
 
     @GetMapping("/books")
@@ -79,14 +101,6 @@ public class BookController {
     public Book getBookById(@PathVariable("bookId") Integer bookId){
         return bookService.getBookById(bookId);
     }
-
-    // @PostMapping(consumes="application/json")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public Book createBook(@Valid @RequestBody Book book, Errors errors){
-    //     if (errors.hasErrors()) 
-    //         throw new ValidationException(createErrorString(errors));   
-    //     return bookService.addBook(book);
-    // }
 
     @PostMapping(path="/books", consumes="application/json")
     @ResponseStatus(HttpStatus.CREATED)
@@ -165,8 +179,7 @@ public class BookController {
     public Image addImageToBook(@PathVariable("bookId") Integer bookId, @Valid @RequestBody Image image){
         return bookService.addImageToBook(bookId, image);
     }
-
-    
+ 
     private String createErrorString(Errors result){
         StringBuilder sb =  new StringBuilder();
         result.getAllErrors().forEach(error -> {

@@ -1,3 +1,4 @@
+
 insert into books(title, content, created_on) values 
 ('Introducing SpringBoot', 'SpringBoot is awesome', CURRENT_TIMESTAMP),
 ('Securing Web applications', 'This post will show how to use SpringSecurity', CURRENT_TIMESTAMP),
@@ -9,6 +10,21 @@ insert into reviews(book_id, name, email, content, like_status, created_on) valu
 (2, 'Rambo', 'rambo@gmail.com', 'Thanks for awesome tips', 'High', CURRENT_TIMESTAMP),
 (3, 'Paul', 'paul@gmail.com', 'Nice post buddy.', 'High', CURRENT_TIMESTAMP),
 (3, 'Hong', 'hong@gmail.com', 'Good done.', 'High', CURRENT_TIMESTAMP)
+;
+
+insert into categories (name, description) values
+('Computer', 'how using Computer'),
+('Science', 'what to know'),
+('Language', 'how you can read'),
+('Social', 'the people world')
+;
+
+INSERT INTO category_book (category_id, book_id) VALUES 
+(1, 1),
+(2, 1),
+(2, 2),
+(4, 2),
+(3, 3)
 ;
 
 -- MySQL --

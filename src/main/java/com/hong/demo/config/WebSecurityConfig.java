@@ -160,6 +160,11 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/images/**").hasRole("AUTOR")
                 .requestMatchers(HttpMethod.DELETE, "/api/images/**").hasRole("ADMIN")
 
+                // .requestMatchers("/api/categories/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.POST, "/api/categories/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("AUTOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
+
 
                 // .requestMatchers("/api/reviews/**").hasRole("USER")
                 .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasRole("USER")

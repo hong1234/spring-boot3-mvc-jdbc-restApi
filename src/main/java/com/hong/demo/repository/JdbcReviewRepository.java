@@ -30,22 +30,16 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class JdbcReviewRepository implements ReviewRepository { 
 
-    private static final String SQL_QUERY_FIND_ALL = "select * from reviews";
-    private static final String SQL_QUERY_FIND_BY_ID = SQL_QUERY_FIND_ALL + " where id = :id";
-    private static final String SQL_QUERY_FIND_BY_BOOKID = SQL_QUERY_FIND_ALL + " where book_id = :bookId";
-
-    private static final String SQL_INSERT = "insert into reviews (book_id, name, email, content, like_status, created_on) values (:bookId, :name, :email, :content, :likeStatus, :createdOn)";
-    // private static final String SQL_UPDATE = "update reviews set name = :name, email = :email, content = :content, updated_on = :updated_on where id = :id";
-    private static final String SQL_DELETE = "delete from reviews where id = :id";
-    private static final String SQL_DELETE_BOOK_REVIEWS = "delete from reviews where book_id = :bookId";
-
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final ReviewRowMapper reviewRowMapper;
 
     @Override
     public Review getReviewById(Integer reviewId){
-        SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", reviewId);
-        Review review = jdbcTemplate.queryForObject(SQL_QUERY_FIND_BY_ID, parameters, reviewRowMapper);
+        String sql = "select * from reviews where id = :id";
+
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("id", reviewId);
+        Review review = jdbcTemplate.queryForObject(sql, parameters, reviewRowMapper);
         if(review == null)
             throw new ResourceNotFoundException("review with Id="+reviewId.toString()+" not found");
         return review;
@@ -53,12 +47,19 @@ public class JdbcReviewRepository implements ReviewRepository {
 
     @Override
     public List<Review> getReviewsOfBook(Integer bookId){
-        SqlParameterSource parameters = new MapSqlParameterSource().addValue("bookId", bookId);
-        return jdbcTemplate.query(SQL_QUERY_FIND_BY_BOOKID, parameters, reviewRowMapper);
+        String sql = "select * from reviews where book_id = :bookId";
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("bookId", bookId);
+        return jdbcTemplate.query(sql, parameters, reviewRowMapper);
     }
 
     @Override
     public Review addReview(Review review) {
+        String sql = """
+                insert into reviews (book_id, name, email, content, like_status, created_on) values 
+                (:bookId, :name, :email, :content, :likeStatus, :createdOn)
+                """;
+        
         SqlParameterSource parameters = new MapSqlParameterSource()
         .addValue("bookId", review.getBookId())
 		.addValue("name", review.getName())
@@ -72,7 +73,7 @@ public class JdbcReviewRepository implements ReviewRepository {
         
         // jdbcTemplate.update(String sql, SqlParameterSource paramSource);
         // jdbcTemplate.update(String sql, SqlParameterSource paramSource, KeyHolder generatedKeyHolder);
-        jdbcTemplate.update(SQL_INSERT, parameters, generatedKeyHolder);
+        jdbcTemplate.update(sql, parameters, generatedKeyHolder);
 
         Number key = generatedKeyHolder.getKey();
         return getReviewById(key.intValue());
@@ -80,14 +81,18 @@ public class JdbcReviewRepository implements ReviewRepository {
 
     @Override
     public void deleteById(Integer reviewId) {
-        SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", reviewId);
-        jdbcTemplate.update(SQL_DELETE, parameters);
+        String sql = "delete from reviews where id = :id";
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("id", reviewId);
+        jdbcTemplate.update(sql, parameters);
     }
 
     @Override
-    public void deleteViewsOfBook(Integer bookId){
-        SqlParameterSource parameters = new MapSqlParameterSource().addValue("bookId", bookId);
-        jdbcTemplate.update(SQL_DELETE_BOOK_REVIEWS, parameters);
+    public void deleteViewsOfBook(Integer bookId) {
+        String sql = "delete from reviews where book_id = :bookId";
+        SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("bookId", bookId);
+        jdbcTemplate.update(sql, parameters);
     }
 
 }

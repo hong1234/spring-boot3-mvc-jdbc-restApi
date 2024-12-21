@@ -1,13 +1,15 @@
 -- H2 or MySQL --
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS category_book;
 DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS categories;
 
 DROP TABLE IF EXISTS authorities;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE books (
-  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   -- uuid  VARCHAR(255) NOT NULL,
   title varchar(150) NOT NULL,
   content varchar(500) NOT NULL,
@@ -16,6 +18,20 @@ CREATE TABLE books (
   -- created_on datetime DEFAULT NULL,
   UNIQUE(title)
   -- PRIMARY KEY (id)
+);
+
+CREATE TABLE categories
+(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE category_book(
+    category_id INT,
+    book_id INT,
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
 -- ALTER TABLE books ADD INDEX (title);
@@ -43,6 +59,7 @@ CREATE TABLE images
   title VARCHAR(255) NOT NULL,
   constraint fk_book_id_images FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE
 );
+
 
 create table users(
 	username varchar(50) not null primary key,

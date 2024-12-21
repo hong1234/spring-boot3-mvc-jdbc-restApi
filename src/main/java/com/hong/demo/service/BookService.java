@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
 
+import com.hong.demo.domain.CategoryBook;
 import com.hong.demo.domain.Image;
 import com.hong.demo.domain.Book;
+import com.hong.demo.domain.Category;
 import com.hong.demo.domain.Review;
 import com.hong.demo.repository.BookRepository;
+import com.hong.demo.repository.JdbcCategoryRepository;
 import com.hong.demo.repository.ReviewRepository;
 
 import com.hong.demo.exceptions.ResourceNotFoundException;
@@ -31,9 +34,18 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final ReviewRepository reviewRepository;
+    private final JdbcCategoryRepository categoryRepository;
 
     public Iterable<Book> bookList(){
         return bookRepository.getAllBooks();
+    }
+
+    public Iterable<Category> getAllCategories(){
+        return categoryRepository.getAllCategories();
+    }
+
+    public Category getCategoryById(Integer categoryId){
+        return categoryRepository.getCategoryById(categoryId);
     }
 
     public Iterable<Book> searchBooksByTitle(String title){
@@ -86,6 +98,12 @@ public class BookService {
         bookRepository.findById(bookId);
         image.setBookId(bookId);
         return bookRepository.addImage(image);
+    }
+
+    public void assignCategoryBook(CategoryBook cabo) {
+        categoryRepository.findById(cabo.getCategoryId());
+        bookRepository.findById(cabo.getBookId());
+        categoryRepository.addCategoryBook(cabo);
     }
 
 }
