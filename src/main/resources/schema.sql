@@ -75,5 +75,5 @@ create table authorities (
 
 -- create index ix_book_title on books (title);
 
-create unique index ix_auth_username on authorities (username,authority);
+create unique index ix_auth_username on authorities (username, authority);
 

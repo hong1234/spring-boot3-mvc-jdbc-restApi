@@ -108,33 +108,37 @@ public class WebSecurityConfig {
     UserDetailsService userService(DataSource dataSource) {
         // return new JdbcUserDetailsManager(dataSource);
         UserDetailsManager userManager = new JdbcUserDetailsManager(dataSource);
-
-        // User.UserBuilder builder  = User.builder().passwordEncoder(passwordEncoder()::encode);
         
-        // var hong = builder
-        //         .username("hong")
-        //         .password("hong")
-        //         .roles("USER")
-        //         .build();
+        // users init ----
+        // usersInit(userManager);
 
-        // var admin = builder
-        //         .username("admin")
-        //         .password("admin")
-        //         .roles("ADMIN")
-        //         .build();
+        // users init ----
+		User.UserBuilder builder = User.builder().passwordEncoder(passwordEncoder()::encode);
 
-        // var boss = builder
-        //         .username("bigboss")
-        //         .password("bigboss")
-        //         .roles("USER", "ADMIN")
-        //         .build();
+		UserDetails hong = builder
+        .username("hong")
+        .password("hong")
+        .roles("USER")
+        .build();
 
-        // userManager.createUser(hong);
-        // userManager.createUser(admin);
-        // userManager.createUser(boss); 
+        UserDetails autor = builder
+        .username("autor")
+        .password("autor")
+        .roles("AUTOR")
+        .build();
 
-        usersInit(userManager);
+		UserDetails admin = builder
+        .username("admin")
+        .password("admin")
+        .roles("USER", "AUTOR", "ADMIN")
+        .build();
+
+		userManager.createUser(hong);
+        userManager.createUser(autor);
+        userManager.createUser(admin);
+
         return userManager;
+        
     }
 
     @Bean

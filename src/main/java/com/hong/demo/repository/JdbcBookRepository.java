@@ -117,9 +117,8 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public Book addBook(Book book) {
         String sql = """
-                insert into books (title, content, created_on) values 
-                (:title, :content, :created_on)
-		    """;
+            insert into books (title, content, created_on) values (:title, :content, :created_on)
+		""";
         SqlParameterSource parameters = new MapSqlParameterSource()
 		.addValue("title", book.getTitle())
 		.addValue("content", book.getContent())
@@ -127,10 +126,14 @@ public class JdbcBookRepository implements BookRepository {
         ;
 
         KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(sql, parameters, generatedKeyHolder);
+
         // try {
-            jdbcTemplate.update(sql, parameters, generatedKeyHolder);
-        // } catch (DuplicateKeyException e) {
-        //     throw new DuplicateException("book title: " + book.getTitle() + " already exists.");
+            // jdbcTemplate.update(sql, parameters, generatedKeyHolder);
+        // } catch (DataAccessException e) {
+            // throw new DuplicateException("book title: " + book.getTitle() + " already exists.");
+            // throw new DuplicateException(e.getMessage());
         // }
         
         Number key = generatedKeyHolder.getKey();

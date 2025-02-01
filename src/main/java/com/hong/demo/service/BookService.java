@@ -58,8 +58,8 @@ public class BookService {
 
     @Transactional
     public Book addBook(Book book){
-        if(bookRepository.findByTitle(book.getTitle()))
-            throw new DuplicateException("book title: '" + book.getTitle() + "' already exists.");
+        // if(bookRepository.findByTitle(book.getTitle()))
+        //     throw new DuplicateException("book title: '" + book.getTitle() + "' already exists.");
         return bookRepository.addBook(book);
     }
 

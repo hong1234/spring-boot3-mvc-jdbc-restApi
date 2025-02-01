@@ -28,20 +28,20 @@ INSERT INTO category_book (category_id, book_id) VALUES
 ;
 
 -- MySQL --
--- insert into images(book_id, uuid, title) values
--- (1, uuid(), 'ok man'),
--- (2, uuid(), 'mamamia'),
--- (3, uuid(), 'cooly'),
--- (3, uuid(), 'ohh lala')
--- ;
+insert into images(book_id, uuid, title) values
+(1, uuid(), 'ok man'),
+(2, uuid(), 'mamamia'),
+(3, uuid(), 'cooly'),
+(3, uuid(), 'ohh lala')
+;
 
 -- H2 --
-insert into images(book_id, uuid, title) values
-(1, random_uuid(), 'ok man'),
-(2, random_uuid(), 'mamamia'),
-(3, random_uuid(), 'cooly'),
-(3, random_uuid(), 'ohh lala')
-;
+-- insert into images(book_id, uuid, title) values
+-- (1, random_uuid(), 'ok man'),
+-- (2, random_uuid(), 'mamamia'),
+-- (3, random_uuid(), 'cooly'),
+-- (3, random_uuid(), 'ohh lala')
+-- ;
 
 
 -- TRUNCATE TABLE reviews;
