@@ -1,10 +1,8 @@
-## hong project restful API with spring boot 3.2 and jdbc and basic authen . updated 10.24
+# spring boot 3 basic authen secured restful API and Jdbc
 
 ## install restful API project java
 
 git clone https://github.com/hong1234/spring-boot3-mvc-jdbc-restApi.git
-
-// cd C:\HONG\JAVAtest\HONGfinal01\spring-boot3-mvc-jdbc-restApi
 
 cd spring-boot3-mvc-jdbc-restApi
 
@@ -16,9 +14,9 @@ mvn spring-boot:run
 
 authen mehtod: Basic Auth
 
-username: autor
+    username: autor
 
-password: autor
+    password: autor
 
 GET http://localhost:8000/api/books
 
@@ -38,6 +36,10 @@ Body /Raw/Json
 ## add review to the book with id = 1
 
 POST http://localhost:8000/api/reviews/1
+
+    username: user
+
+    password: user
 
 Body /Raw/Json
 
