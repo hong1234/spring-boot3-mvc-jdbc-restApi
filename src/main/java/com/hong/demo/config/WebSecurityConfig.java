@@ -34,6 +34,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import javax.sql.DataSource;
 
+import org.springframework.boot.CommandLineRunner;
+
 
 @Configuration
 public class WebSecurityConfig {
@@ -54,6 +56,10 @@ public class WebSecurityConfig {
     @Qualifier("delegatedAccessDeniedHandler")
     private AccessDeniedHandler accessDeniedHandler;
 
+    @Autowired
+    @Qualifier("dataSource")
+    DataSource dataSource;
+
     @Bean
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -62,83 +68,59 @@ public class WebSecurityConfig {
     // @Bean
     // public UserDetailsService userDetailsService(){
 
-    //     UserDetails hong = User.builder()
-    //             .username("hong")
-    //             .password(passwordEncoder().encode("password"))
+    //     UserDetails user = User.builder()
+    //             .username("user")
+    //             .password(passwordEncoder().encode("userPW"))
     //             .roles("USER")
     //             .build();
 
     //     UserDetails admin = User.builder()
     //             .username("admin")
-    //             .password(passwordEncoder().encode("admin"))
+    //             .password(passwordEncoder().encode("adminPW"))
     //             .roles("ADMIN")
     //             .build();
 
-    //     return new InMemoryUserDetailsManager(hong, admin);
+    //     return new InMemoryUserDetailsManager(user, admin);
     // }
 
     private void usersInit(UserDetailsManager userManager){
-		// users init ----
 		User.UserBuilder builder = User.builder().passwordEncoder(passwordEncoder()::encode);
 
-		UserDetails hong = builder
-        .username("hong")
-        .password("hong")
-        .roles("USER")
-        .build();
+		UserDetails user = builder
+            .username("user")
+            .password("user")
+            .roles("USER")
+            .build();
 
         UserDetails autor = builder
-        .username("autor")
-        .password("autor")
-        .roles("AUTOR")
-        .build();
+            .username("autor")
+            .password("autor")
+            .roles("AUTOR")
+            .build();
 
 		UserDetails admin = builder
-        .username("admin")
-        .password("admin")
-        .roles("USER", "AUTOR", "ADMIN")
-        .build();
+            .username("admin")
+            .password("admin")
+            .roles("USER", "AUTOR", "ADMIN")
+            .build();
 
-		userManager.createUser(hong);
+		userManager.createUser(user);
         userManager.createUser(autor);
         userManager.createUser(admin);
 	}
 
+    // @Bean
+    // UserDetailsService userService(DataSource dataSource) {
+    //     return new JdbcUserDetailsManager(dataSource);
+    // }
+
     @Bean
-    UserDetailsService userService(DataSource dataSource) {
+    UserDetailsService userService() {
         // return new JdbcUserDetailsManager(dataSource);
+
         UserDetailsManager userManager = new JdbcUserDetailsManager(dataSource);
-        
-        // users init ----
-        // usersInit(userManager);
-
-        // users init ----
-		User.UserBuilder builder = User.builder().passwordEncoder(passwordEncoder()::encode);
-
-		UserDetails hong = builder
-        .username("hong")
-        .password("hong")
-        .roles("USER")
-        .build();
-
-        UserDetails autor = builder
-        .username("autor")
-        .password("autor")
-        .roles("AUTOR")
-        .build();
-
-		UserDetails admin = builder
-        .username("admin")
-        .password("admin")
-        .roles("USER", "AUTOR", "ADMIN")
-        .build();
-
-		userManager.createUser(hong);
-        userManager.createUser(autor);
-        userManager.createUser(admin);
-
+        usersInit(userManager); // add users
         return userManager;
-        
     }
 
     @Bean
@@ -151,8 +133,8 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
                 // .requestMatchers(HttpMethod.GET, "/h2-console/**").hasRole("ADMIN")
-                // .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                // .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                 
                 // .requestMatchers("/api/books/**").hasRole("AUTOR")
                 .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("AUTOR")
