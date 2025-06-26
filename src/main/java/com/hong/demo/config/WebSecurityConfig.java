@@ -36,7 +36,6 @@ import javax.sql.DataSource;
 
 import org.springframework.boot.CommandLineRunner;
 
-
 @Configuration
 public class WebSecurityConfig {
 
@@ -109,11 +108,6 @@ public class WebSecurityConfig {
         userManager.createUser(admin);
 	}
 
-    // @Bean
-    // UserDetailsService userService(DataSource dataSource) {
-    //     return new JdbcUserDetailsManager(dataSource);
-    // }
-
     @Bean
     UserDetailsService userService() {
         // return new JdbcUserDetailsManager(dataSource);
@@ -129,7 +123,7 @@ public class WebSecurityConfig {
         http
             .csrf((csrf) -> csrf.disable())
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .securityMatcher("/api/**")
+            // .securityMatcher("/api/**")
             .authorizeHttpRequests(authorize -> authorize
                 // .anyRequest().authenticated()
                 // .requestMatchers(HttpMethod.GET, "/h2-console/**").hasRole("ADMIN")
@@ -151,7 +145,6 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("AUTOR")
                 .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
 
-
                 // .requestMatchers("/api/reviews/**").hasRole("USER")
                 .requestMatchers(HttpMethod.POST, "/api/reviews/**").hasRole("USER")
                 .requestMatchers(HttpMethod.PUT, "/api/reviews/**").hasRole("USER")
@@ -162,7 +155,6 @@ public class WebSecurityConfig {
             // .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // This so embedded frames in h2-console are working
             
             // .httpBasic(Customizer.withDefaults())
-            
             .httpBasic(basic -> basic.authenticationEntryPoint(authEntryPoint))
             .exceptionHandling(customizer -> customizer.accessDeniedHandler(accessDeniedHandler))
             ;
